@@ -1,0 +1,255 @@
+*** Settings ***
+Library           Selenium2Library
+
+*** Variables ***
+${CHART_BACKGROUND}    css=rect.highcharts-plot-background
+${PICKUP}         css=div#pick-up
+${PACE}           css=div#pace
+${COMPSET}        css=div#compset
+${MARKET}         css=div#market
+${PRICING}        css=div#pricing
+${FLIGHTS}        css=div#flights
+${EVENTS}         css=div#events
+${INPUT_EMAIL}    name=email
+${MY_EMAIL}       gary@lodgiq.com
+${INPUT_PASSWORD}    name=password
+${MY_PASSWORD}    Test123$
+${LOGIN}          css=button#formSignInSubmitBtn
+${URL}            http://app-staging.lodgiq.com/app/v3/index.html#/login
+${LOGOUT_DROPDOWN}    //span[@class='ellipsis']
+${LOGOUT}         //ul[@class='dropdown-menu' and @role='menu' and @aria-labelledby='usermenuBtn']/li/following-sibling::li//following-sibling::li//following-sibling::li
+${REFINERY_DROPDOWN}    //button[@class='btn-user-menus ellipsis dropdown-toggle btn btn-default']
+${48_LEX}         //a[text()='48Lex']
+${EXCHANGE}       //div[@id='exchange']
+${FORECAST}       //div[@id='forecast']
+${GRID_VIEW}      //span[@class='icon-table-view-icon']
+@{PACE_SELECT_DATES_BUTTONS}    //span[text()='Select Dates']    //label[text()=' Same Period,SDLY']    //label[text()=' Custom Range']    //input[@value='weeks']/parent::label    //input[@value='months']/parent::label    //input[@value='range']/parent::label    //input[@class='form-control ng-pristine ng-valid ng-touched']
+...               //button[text()='Apply']
+@{MARKETS_LOCATION_DROPDOWN}    //span[text()='Markets']/following-sibling::div    //div[text()='NYC Market 45K']    //div[text()='NYC Midtown']    //div[text()='New York City Market']    //div[text()='NYC East']    //div[text()='NYC West']    //div[text()='New York City 66K']
+${SCOPE_DROPDOWN}    //span[text()='SCOPE']/following-sibling::div
+${PICKUP_DAYS}    //input[@class='form-control days-picker']
+@{EVENT_TYPE}     //span[text()='Event Type']/following-sibling::div    //div[text()='All']    //div[text()='System']    //div[text()='Custom']
+@{EVENT_CATEGORIES}    //span[text()='Categories']/following-sibling::div    //div[text()='Conference']    //div[text()='Sport']    //div[text()='Holiday']    //div[text()='Music']    //div[text()='In House']    //div[text()='Other']
+${CANNED_REPORT}    //button[@class='icon-notebook-streamline btn-canned-report pull-right dropdown-toggle btn btn-default']
+@{FLASH_REPORT}    //a[text()=' Flash Report']    //label[@class='switch']    //div[@class='flash-report-three-cont']    //button[@class='flash-flip']
+${EXIT_POPUP_BUTTON}    //span[@class='glyphicon glyphicon-remove']
+@{PRODUCTION_REPORT}    //a[text()=' Production Report']    //p[@class='chart-title no-margin measures tile-display-title' and text()='production report']
+@{PRODUCTION_BY_MARKET_CODE}    //a[text()=' Production Report by Market Code']    //p[@class='chart-title no-margin measures tile-display-title' and text()='production market report']
+@{FORECAST_BUILDER}    //a[text()=' Forecast Builder']    //p[@class='chart-title no-margin measures tile-display-title' and text()='forecast builder']    //button[@data-ng-click='shiftForward()']    //button[@data-ng-click='shiftBackward()']    //th[@data-title='Rooms' and @class='Rooms-cell OTB k-header k-with-icon']    //th[@data-field='forecastBuilder["OTB"]["ADRAggregateTotal"]']    //th[@data-field='forecastBuilder["OTB"]["RevenueTotal"]']
+@{DAILY_RATE_PUSH_STATUS}    //a[text()=' Daily Rate Push Status']    //p[@class='chart-title no-margin measures tile-display-title' and text()='daily ratesend status']
+@{BI_PICKUP_ANALYSIS}    //a[text()=' BI Pickup Analysis']    //p[@class='chart-title no-margin measures tile-display-title' and text()='bi pickup analysis']
+@{BI_PACE_COMPARISON}    //a[text()=' BI Pace Comparison']    //p[@class='chart-title no-margin measures tile-display-title' and text()='bi pace comparison']
+@{BI_SENSITIVITY_ANALYSIS}    //a[text()=' BI Sensitivity Analysis']    //p[@class='chart-title no-margin measures tile-display-title' and text()='bi sensitivity analysis']
+@{MANUAL_FORECAST}    //a[text()=' Forecast']    //span[text()='Manual Forecast']    //button[@class='close' and text()=' x ']
+${DBA_FROM_SCOPE}    //button[@class='btn btn-default ng-pristine ng-valid ng-touched']
+${DBA_FROM_MARKET}    //span[text()='Date']
+
+*** Keywords ***
+OpenBrowser&Maximize
+    Open Browser    ${URL}    chrome
+    Maximize Browser Window
+
+LoginData
+    Input Text    ${INPUT_EMAIL}    ${MY_EMAIL}
+    Input Text    ${INPUT_PASSWORD}    ${MY_PASSWORD}
+    Click Button    ${LOGIN}
+    Sleep    3s
+
+Logout&CloseBrowser
+    Click Element    ${LOGOUT_DROPDOWN}
+    Sleep    2s
+    Click Element    ${LOGOUT}
+    Close Window
+
+ClickTables
+    Click Element    ${FORECAST}
+    Click Element    ${PACE}
+    Click Element    ${COMPSET}
+    Click Element    ${MARKET}
+    Click Element    ${PRICING}
+    #Click Element    ${EXCHANGE}
+    Click Element    ${FLIGHTS}
+    Click Element    ${EVENTS}
+    Click Element    ${PICKUP}
+
+Refinery_48LEX
+    Click Element    ${REFINERY_DROPDOWN}
+    Sleep    3s
+    Click Element    ${48_LEX}
+    Sleep    3s
+
+GRID_ON
+    Click Element    ${PACE}
+    Sleep    3s
+    Click Element    ${GRID_VIEW}
+
+PaceButtons
+    Click Element    ${PACE}
+    Sleep    2s
+    Click Element    @{PACE_SELECT_DATES_BUTTONS}[0]
+    Sleep    2s
+    Click Element    @{PACE_SELECT_DATES_BUTTONS}[1]
+    Sleep    2s
+    Click Element    @{PACE_SELECT_DATES_BUTTONS}[2]
+    Sleep    2s
+    Click Element    @{PACE_SELECT_DATES_BUTTONS}[3]
+    Sleep    2s
+    Click Element    @{PACE_SELECT_DATES_BUTTONS}[4]
+    Sleep    2s
+    Click Element    @{PACE_SELECT_DATES_BUTTONS}[5]
+    #Sleep    2s
+    #Click Element    @{PACE_SELECT_DATES_BUTTONS}[6]
+    #Sleep    2s
+    #Click Element    @{PACE_SELECT_DATES_BUTTONS}[7]
+
+MarketButtons
+    Click Element    ${MARKET}
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[0]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[1]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[0]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[2]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[0]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[3]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[0]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[4]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[0]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[5]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[0]
+    Sleep    2s
+    Click Element    @{MARKETS_LOCATION_DROPDOWN}[6]
+    Sleep    2s
+    Click Element    ${SCOPE_DROPDOWN}
+    Sleep    2s
+    #Click Element    ${DBA_FROM_MARKET}
+    #Sleep    2s
+    Input Text    ${PICKUP_DAYS}    3
+
+EventButtons
+    Click Element    ${EVENTS}
+    Sleep    2s
+    Click Element    @{EVENT_TYPE}[0]
+    Click Element    @{EVENT_TYPE}[1]
+    Sleep    2s
+    Click Element    @{EVENT_TYPE}[0]
+    Click Element    @{EVENT_TYPE}[2]
+    Sleep    2s
+    Click Element    @{EVENT_TYPE}[0]
+    Click Element    @{EVENT_TYPE}[3]
+    Sleep    2s
+    Click Element    @{EVENT_CATEGORIES}[0]
+    Click Element    @{EVENT_CATEGORIES}[1]
+    Sleep    2s
+    Click Element    @{EVENT_CATEGORIES}[0]
+    Click Element    @{EVENT_CATEGORIES}[2]
+    Sleep    2s
+    Click Element    @{EVENT_CATEGORIES}[0]
+    Click Element    @{EVENT_CATEGORIES}[3]
+    Sleep    2s
+    Click Element    @{EVENT_CATEGORIES}[0]
+    Click Element    @{EVENT_CATEGORIES}[4]
+    Sleep    2s
+    Click Element    @{EVENT_CATEGORIES}[0]
+    Click Element    @{EVENT_CATEGORIES}[5]
+    Sleep    2s
+    Click Element    @{EVENT_CATEGORIES}[0]
+    Click Element    @{EVENT_CATEGORIES}[6]
+
+CompsetButtons
+    Click Element    ${COMPSET}
+    Sleep    2s
+    Click Element    ${SCOPE_DROPDOWN}
+    Sleep    2s
+    #Click Element    ${DBA_FROM_SCOPE}
+
+CannedReportDropdown
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{FLASH_REPORT}[0]
+    Sleep    2s
+    Click Element    @{FLASH_REPORT}[1]
+    Sleep    2s
+    Element Should Be Visible    @{FLASH_REPORT}[2]
+    Sleep    2s
+    Click Element    @{FLASH_REPORT}[3]
+    Sleep    2s
+    Click Element    ${EXIT_POPUP_BUTTON}
+    Sleep    2s
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{PRODUCTION_REPORT}[0]
+    Sleep    2s
+    Element Should Be Visible    @{PRODUCTION_REPORT}[1]
+    Sleep    2s
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{PRODUCTION_BY_MARKET_CODE}[0]
+    Sleep    2s
+    Element Should Be Visible    @{PRODUCTION_BY_MARKET_CODE}[1]
+    Sleep    2s
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{FORECAST_BUILDER}[0]
+    Sleep    5s
+    Element Should Be Visible    @{FORECAST_BUILDER}[1]
+    Sleep    7s
+    Click Element    @{FORECAST_BUILDER}[2]    #click forwards button
+    Sleep    2s
+    Click Element    @{FORECAST_BUILDER}[3]    #click backwards button
+    Sleep    7s
+    Element Should Be Visible    @{FORECAST_BUILDER}[4]    #rooms are displayed
+    Element Should Be Visible    @{FORECAST_BUILDER}[5]    #adr is displayed
+    Element Should Be Visible    @{FORECAST_BUILDER}[6]    #revenue is displayed
+    Sleep    2s
+    #more on forecast builder
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{DAILY_RATE_PUSH_STATUS}[0]
+    Sleep    2s
+    Element Should Be Visible    @{DAILY_RATE_PUSH_STATUS}[1]
+    Sleep    2s
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{BI_PICKUP_ANALYSIS}[0]
+    Sleep    2s
+    Element Should Be Visible    @{BI_PICKUP_ANALYSIS}[1]
+    Sleep    2s
+    Input Text    ${PICKUP_DAYS}    1
+    Sleep    2s
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{BI_PACE_COMPARISON}[0]
+    Sleep    2s
+    Element Should Be Visible    @{BI_PACE_COMPARISON}[1]
+    Sleep    2s
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{BI_SENSITIVITY_ANALYSIS}[0]
+    #Sleep    10s
+    #Element Should Be Visible    @{BI_SENSITIVITY_ANALYSIS}[1]
+    Sleep    2s
+    #compare data changes
+    Click Element    ${CANNED_REPORT}
+    Sleep    2s
+    Click Element    @{MANUAL_FORECAST}[0]
+    Sleep    2s
+    Element Should Be Visible    @{MANUAL_FORECAST}[1]
+    Sleep    2s
+    Click Element    @{MANUAL_FORECAST}[2]    #close tab
+    Sleep    2s
+    #manual forecast by market and otb
+
+PickupButtons
+    Click Element    ${PICKUP}
+    Sleep    2s
+    Input Text    ${PICKUP_DAYS}    2

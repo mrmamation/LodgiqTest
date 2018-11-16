@@ -1,0 +1,61 @@
+*** Settings ***
+Resource          Resources.txt
+Library           String
+
+*** Variables ***
+${VERIFY_PAGE_LOADED}    css=div#bs-example-navbar-collapse-1
+${SDLY_BUTTON_IS_OFF}    //label[@class='switch ']
+${SDLY_BUTTON_IS_ON}    //label[@class='switch on']
+${SEGMENTED_MODE_ON}    //button[@class='zoom-plus']
+
+*** Test Cases ***
+TC_OpenBrowser and Login
+    [Setup]    OpenBrowser&Maximize
+    LoginData
+    Wait Until Page Contains Element    ${VERIFY_PAGE_LOADED}
+    Sleep    2s
+    Refinery_48LEX
+    Sleep    2s
+    GRID_ON
+    Sleep    2s
+
+TC_Tables With And Without Sdly
+    ClickTables
+    Sleep    2s
+    Click Element    ${SDLY_BUTTON_IS_OFF}
+    ClickTables
+    Sleep    2s
+    Click Element    ${SEGMENTED_MODE_ON}
+    ClickTables
+    Sleep    2s
+    Click Element    ${SDLY_BUTTON_IS_ON}
+    ClickTables
+    Sleep    2s
+
+TC_Check Specific Buttons Do Not Break
+    PaceButtons
+    Sleep    2s
+    MarketButtons
+    Sleep    2s
+    EventButtons
+    Sleep    2s
+    CompsetButtons
+    Sleep    2s
+    PickupButtons
+    Sleep    2s
+    #Click Element    ${FLIGHTS}
+    #Page Should Not Contain Element    ${SDLY_BUTTON_IS_OFF}    ${SDLY_BUTTON_IS_ON}
+    #Sleep    2s
+    #Click Element    ${EXCHANGE}
+    #Page Should Not Contain Element    ${SDLY_BUTTON_IS_OFF}    ${SDLY_BUTTON_IS_ON}
+    #Sleep    2s
+    #Click Element    ${FORECAST}
+    #Page Should Not Contain Element    ${SDLY_BUTTON_IS_OFF}    ${SDLY_BUTTON_IS_ON}
+    #Sleep    2s
+
+TC_Check Each Canned Report
+    CannedReportDropdown
+    Sleep    2s
+
+TC_Logout and CloseBrowser
+    Logout&CloseBrowser
